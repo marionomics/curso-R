@@ -1,0 +1,26 @@
+---
+title: "Manipulación de bases de datos"
+author: "Mario A. Garcia-Meza"
+date: '2023-10-24'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introducción
+Una de las mayores ventajas de trabajar con R es que es un lenguaje relativamente intuitivo para hacer modificaciones a los datos. Y cuando el trabajo se empieza a volver complejo, las modificaciones de los datos se convierten en el arma más poderosa.
+
+## Bases de datos
+R tiene objetos de tipo dataframe (cuadro de datos), que son los que almacenan bases de datos. Podemos crear objetos dataframe desde cero. Una forma sería crear una matriz y luego transformarla en base de datos.
+
+```{r dataframe-from-matrix}
+M <- matrix(c(1,0,1,1,1,0,"A","B","B","A","C","A"), ncol = 2) # Crea una matriz con dos columnas
+df <- data.frame(M) # convierte la matriz en un cuadro de datos
+df
+```
+Pero también podemos cargar una base de datos en algún otro formato, como csv o Excel. Es mucho más fácil cargar desde csv porque es un formato de texto plano y normalmente viene en estructuras que son fáciles de manejar. Ya podremos ver en cursos avanzados cómo tratar datos que estén en formatos extraños o que no se puedan manejar tan fácilmente. 
+
+## Cargar una base de datos en CSV
+Hay al menos tres formas de cargar una base de datos si estás usando RStudio. Una es con el botón "Import Dataset, que está en la ventana superior derecha en RStudio.
