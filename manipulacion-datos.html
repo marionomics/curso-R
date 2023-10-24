@@ -395,9 +395,139 @@ fácilmente.</p>
 </div>
 <div id="cargar-una-base-de-datos-en-csv" class="section level2">
 <h2>Cargar una base de datos en CSV</h2>
-<p>Hay al menos tres formas de cargar una base de datos si estás usando
-RStudio. Una es con el botón “Import Dataset, que está en la ventana
-superior derecha en RStudio.</p>
+<p>Hay al menos dos formas de cargar una base de datos si estás usando
+RStudio. Una es con el botón “Import Dataset”, que está en la ventana
+superior derecha en RStudio. Ahí se selecciona “From text”, para cargar
+el archivo. También hay opción para cargar desde Excel o desde programas
+como Stata o SPSS.</p>
+<p>Lo que RStudio hace cuando seleccionas esto es simplemente ayudarte a
+ejecutar código en R con las especificaciones que le damos de manera
+visual. Pero nosotros podemos cargar directamente el archivo con las
+especificaciones que quedamos, si sabemos en dónde se encuentra.</p>
+<pre class="r"><code>df &lt;- read.csv(&quot;data/ventas.csv&quot;)
+head(df)</code></pre>
+<pre><code>##   Producto_ID Producto_Nombre   Categoria Fecha_Venta Monto_Venta Cliente_ID
+## 1           1      Producto A Categoría 1  2023-01-01         100        101
+## 2           2      Producto B Categoría 2  2023-01-02         150        102
+## 3           3      Producto C Categoría 1  2023-01-03         200        103
+## 4           4      Producto D Categoría 3  2023-01-04         250        104
+## 5           5      Producto E Categoría 2  2023-01-05         300        105
+## 6           6      producto F Categoría 1  2023-01-06          NA        106
+##   Cliente_Nombre     Cliente_Email Incorrect_Data_Type Total_Monto_Venta
+## 1         Carlos  carlos@gmail.com                 101              3353
+## 2          Maria maria@hotmail.com                 102              3297
+## 3           Jose    jose@yahoo.com                 103              3082
+## 4            Ana     ana@gmail.com                 104              3957
+## 5           Juan  juan@hotmail.com                 105              3745
+## 6           Luis    luis@yahoo.com                 106              3312
+##   Monto_Venta_Binned
+## 1                Low
+## 2                Low
+## 3                Low
+## 4             Medium
+## 5             Medium
+## 6</code></pre>
+<div id="qué-hay-en-la-base-de-datos" class="section level3">
+<h3>¿Qué hay en la base de datos?</h3>
+<p>Podemos revisar información sobre la base de datos usando la función
+<code>str</code> de la siguiente manera:</p>
+<pre class="r"><code>str(df)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    104 obs. of  11 variables:
+##  $ Producto_ID        : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ Producto_Nombre    : Factor w/ 11 levels &quot;Producto A&quot;,&quot;Producto B&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ Categoria          : Factor w/ 4 levels &quot;&quot;,&quot;Categoría 1&quot;,..: 2 3 2 4 3 2 4 1 2 4 ...
+##  $ Fecha_Venta        : Factor w/ 100 levels &quot;2023-01-01&quot;,&quot;2023-01-02&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ Monto_Venta        : num  100 150 200 250 300 NA NA NA NA NA ...
+##  $ Cliente_ID         : int  101 102 103 104 105 106 107 108 109 110 ...
+##  $ Cliente_Nombre     : Factor w/ 21 levels &quot;  Roberto  &quot;,..: 3 14 10 2 11 13 9 7 15 19 ...
+##  $ Cliente_Email      : Factor w/ 22 levels &quot;&quot;,&quot;ana@gmail.com&quot;,..: 3 15 11 2 12 14 10 7 16 20 ...
+##  $ Incorrect_Data_Type: int  101 102 103 104 105 106 107 108 109 110 ...
+##  $ Total_Monto_Venta  : num  3353 3297 3082 3957 3745 ...
+##  $ Monto_Venta_Binned : Factor w/ 4 levels &quot;&quot;,&quot;High&quot;,&quot;Low&quot;,..: 3 3 3 4 4 1 1 1 1 1 ...</code></pre>
+<p>Hay algunos problemas con esta base de datos, por lo que hay que
+poner atención a los detalles.</p>
+</div>
+</div>
+<div id="explorando-la-base-de-datos" class="section level2">
+<h2>Explorando la base de datos</h2>
+<p>Si presionamos la base de datos en RStudio, nos abrirá una tabla como
+las de Excel, donde podemos ver los datos cómo se comportan. Pero no
+podemos manipularlos ahí directamente, como en Excel (no me parece
+imposible que en un futuro lo hagan posible). Para explorar los datos,
+tenemos que hacerlo con código.</p>
+<p>Digamos que queremos conocer más sobre una variable. Podemos usar
+<code>$</code> para seleccionar la variable que deseamos. Por
+ejemplo</p>
+<pre class="r"><code>df$Producto_Nombre</code></pre>
+<pre><code>##   [1] Producto A Producto B Producto C Producto D Producto E producto F
+##   [7] Producto G Producto H Producto I Producto J Producto A Producto B
+##  [13] Producto B Producto C Producto D Producto E producto F Producto G
+##  [19] Producto H Producto I Producto J Producto A Producto B Producto C
+##  [25] Producto D Producto E producto F Producto G Producto H Producto I
+##  [31] Producto J Producto A Producto B Producto C Producto D producto M
+##  [37] producto F Producto G Producto H Producto I Producto J Producto A
+##  [43] Producto B Producto C Producto D Producto E producto F Producto G
+##  [49] Producto H Producto I Producto J Producto A Producto B Producto C
+##  [55] Producto D Producto E producto F Producto G Producto H Producto I
+##  [61] Producto J Producto A Producto B Producto C Producto D Producto E
+##  [67] producto F Producto G Producto H Producto I Producto J Producto A
+##  [73] Producto B Producto C Producto D Producto E producto F Producto G
+##  [79] Producto H Producto I Producto J Producto A Producto B Producto C
+##  [85] Producto D Producto E producto F Producto G Producto H Producto I
+##  [91] Producto J Producto A Producto B Producto C Producto D Producto E
+##  [97] producto F Producto G Producto H Producto I Producto J Producto A
+## [103] Producto A Producto J
+## 11 Levels: Producto A Producto B Producto C Producto D ... producto M</code></pre>
+<p>Nos muestra el vector o lista con los productos. Podríamos hacer una
+tabla de frecuencia simple con esta información:</p>
+<pre class="r"><code>table(df$Producto_Nombre)</code></pre>
+<pre><code>## 
+## Producto A Producto B Producto C Producto D Producto E producto F Producto G 
+##         12         11         10         10          9         10         10 
+## Producto H Producto I Producto J producto M 
+##         10         10         11          1</code></pre>
+<p>Podemos ver que el producto A aparece más veces en nuestra base de
+datos, pero no necesariamente es el que tenga mayores ventas. Para
+explorar las ventas, necesitamos revisar nuestra columna con esta
+variable. Una buena manera de hacerlo es aplicar la función
+<code>mean()</code> para que nos muestre la media de los valores que
+presenta.</p>
+<pre class="r"><code>mean(df$Monto_Venta)</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>Ups. Esto no puede ser correcto. El problema es que tenemos registros
+que no cuentan con información en esta variable. Tendremos que lidiar
+con eso más adelante, pero de momento nos toca simplemente pedirle que
+haga la operación sin considerar los valores faltantes.</p>
+<pre class="r"><code>mean(df$Monto_Venta, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 338.0412</code></pre>
+<pre class="r"><code>sum(df$Monto_Venta, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 32790</code></pre>
+<p>Nota que lo que hace R no es eliminar el dato, simplemente lo está
+ignorando por el momento para hacer el cálculo. Este mismo truco te
+sirve para mostrar las sumas. Aquí podemos ver que tenemos registrados
+32,790 en ventas, con ventas promedio de 338.04.</p>
+<p>Nos interesa conocer más sobre las ventas de nuestros productos. Por
+ejemplo, podríamos pedir que nos de las ventas promedio del producto
+A:</p>
+<pre class="r"><code>mean(df[df$Producto_Nombre == &quot;Producto A&quot;,]$Monto_Venta, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 335.3</code></pre>
+<p>Este código parece un poco largo, así que veamos un poco de lo que
+hay detrás.</p>
+</div>
+<div id="ubicando-los-datos-en-nuestra-base" class="section level2">
+<h2>Ubicando los datos en nuestra base</h2>
+<p>R tiene un operador <code>[]</code> que permite seleccionar elementos
+dentro de nuesta base de datos. Hay varias formas de hacer selecciones
+en R. Veamos lo que pasa con el siguiente código. ¿Puedes adivinar lo
+que se presentará en la consola antes de ejecutarlo?</p>
+<pre class="r"><code>df[1,1]
+df[1:5,]
+df[,1:5]
+df[1:5]
+df[df$Producto_ID == 5,]</code></pre>
+<p>En el primero, sólo muestra el primer dato de la primera columna.</p>
+<pre><code>Error in `[.data.frame`(df, df$Producto_ID == 5) : 
+  undefined columns selected</code></pre>
 </div>
 
 

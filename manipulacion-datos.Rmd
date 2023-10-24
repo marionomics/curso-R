@@ -23,4 +23,62 @@ df
 Pero también podemos cargar una base de datos en algún otro formato, como csv o Excel. Es mucho más fácil cargar desde csv porque es un formato de texto plano y normalmente viene en estructuras que son fáciles de manejar. Ya podremos ver en cursos avanzados cómo tratar datos que estén en formatos extraños o que no se puedan manejar tan fácilmente. 
 
 ## Cargar una base de datos en CSV
-Hay al menos tres formas de cargar una base de datos si estás usando RStudio. Una es con el botón "Import Dataset, que está en la ventana superior derecha en RStudio.
+Hay al menos dos formas de cargar una base de datos si estás usando RStudio. Una es con el botón "Import Dataset", que está en la ventana superior derecha en RStudio. Ahí se selecciona "From text", para cargar el archivo. También hay opción para cargar desde Excel o desde programas como Stata o SPSS.
+
+Lo que RStudio hace cuando seleccionas esto es simplemente ayudarte a ejecutar código en R con las especificaciones que le damos de manera visual. Pero nosotros podemos cargar directamente el archivo con las especificaciones que quedamos, si sabemos en dónde se encuentra.
+```{r cargar-datos}
+df <- read.csv("data/ventas.csv")
+head(df)
+```
+### ¿Qué hay en la base de datos?
+Podemos revisar información sobre la base de datos usando la función `str` de la siguiente manera:
+```{r str}
+str(df)
+```
+Hay algunos problemas con esta base de datos, por lo que hay que poner atención a los detalles.
+
+## Explorando la base de datos
+Si presionamos la base de datos en RStudio, nos abrirá una tabla como las de Excel, donde podemos ver los datos cómo se comportan. Pero no podemos manipularlos ahí directamente, como en Excel (no me parece imposible que en un futuro lo hagan posible). Para explorar los datos, tenemos que hacerlo con código.
+
+Digamos que queremos conocer más sobre una variable. Podemos usar `$` para seleccionar la variable que deseamos. Por ejemplo
+```{r select-variable}
+df$Producto_Nombre
+```
+Nos muestra el vector o lista con los productos. Podríamos hacer una tabla de frecuencia simple con esta información:
+```{r freq-table}
+table(df$Producto_Nombre)
+```
+Podemos ver que el producto A aparece más veces en nuestra base de datos, pero no necesariamente es el que tenga mayores ventas. Para explorar las ventas, necesitamos revisar nuestra columna con esta variable. Una buena manera de hacerlo es aplicar la función `mean()` para que nos muestre la media de los valores que presenta.
+
+```{r explore-sales}
+mean(df$Monto_Venta)
+```
+Ups. Esto no puede ser correcto. El problema es que tenemos registros que no cuentan con información en esta variable. Tendremos que lidiar con eso más adelante, pero de momento nos toca simplemente pedirle que haga la operación sin considerar los valores faltantes.
+```{r mean-wo-na}
+mean(df$Monto_Venta, na.rm = TRUE)
+sum(df$Monto_Venta, na.rm = TRUE)
+```
+Nota que lo que hace R no es eliminar el dato, simplemente lo está ignorando por el momento para hacer el cálculo. Este mismo truco te sirve para mostrar las sumas. Aquí podemos ver que tenemos registrados 32,790 en ventas, con ventas promedio de 338.04.
+
+Nos interesa conocer más sobre las ventas de nuestros productos. Por ejemplo, podríamos pedir que nos de las ventas promedio del producto A:
+
+```{r ventas-A}
+mean(df[df$Producto_Nombre == "Producto A",]$Monto_Venta, na.rm = TRUE)
+```
+Este código parece un poco largo, así que veamos un poco de lo que hay detrás.
+
+## Ubicando los datos en nuestra base
+
+R tiene un operador `[]` que permite seleccionar elementos dentro de nuesta base de datos. Hay varias formas de hacer selecciones en R. Veamos lo que pasa con el siguiente código. ¿Puedes adivinar lo que se presentará en la consola antes de ejecutarlo?
+```{r selectr, eval=FALSE}
+df[1,1]
+df[1:5,]
+df[,1:5]
+df[1:5]
+df[df$Producto_ID == 5,]
+```
+En el primero, sólo muestra el primer dato de la primera columna.
+```
+Error in `[.data.frame`(df, df$Producto_ID == 5) : 
+  undefined columns selected
+```
