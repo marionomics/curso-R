@@ -23,13 +23,22 @@ df
 Pero también podemos cargar una base de datos en algún otro formato, como csv o Excel. Es mucho más fácil cargar desde csv porque es un formato de texto plano y normalmente viene en estructuras que son fáciles de manejar. Ya podremos ver en cursos avanzados cómo tratar datos que estén en formatos extraños o que no se puedan manejar tan fácilmente. 
 
 ## Cargar una base de datos en CSV
-Hay al menos dos formas de cargar una base de datos si estás usando RStudio. Una es con el botón "Import Dataset", que está en la ventana superior derecha en RStudio. Ahí se selecciona "From text", para cargar el archivo. También hay opción para cargar desde Excel o desde programas como Stata o SPSS.
+Hay al menos tres formas de cargar una base de datos si estás usando RStudio. Una es con el botón "Import Dataset", que está en la ventana superior derecha en RStudio. Ahí se selecciona "From text", para cargar el archivo. También hay opción para cargar desde Excel o desde programas como Stata o SPSS.
 
 Lo que RStudio hace cuando seleccionas esto es simplemente ayudarte a ejecutar código en R con las especificaciones que le damos de manera visual. Pero nosotros podemos cargar directamente el archivo con las especificaciones que quedamos, si sabemos en dónde se encuentra.
 ```{r cargar-datos}
 df <- read.csv("data/ventas.csv")
 head(df)
 ```
+La tercera forma es cargando la url directamente de la base de datos.
+
+```{r cargando-por-url}
+url <- "https://raw.githubusercontent.com/marionomics/curso-R/main/data/ventas.csv"
+
+df2 <- read.csv(url)
+head(df2)
+```
+
 ### ¿Qué hay en la base de datos?
 Podemos revisar información sobre la base de datos usando la función `str` de la siguiente manera:
 ```{r str}
@@ -77,8 +86,15 @@ df[,1:5]
 df[1:5]
 df[df$Producto_ID == 5,]
 ```
-En el primero, sólo muestra el primer dato de la primera columna.
+En el primero, sólo muestra el primer dato de la primera columna. Como puedes ver, los corchetes muestran lo que hay en diferentes rangos de columnas y filas, según le especifiquemos. Nota que hay una coma en medio de los corchetes. ¿Qué sucede si no lo ponemos? R no sabrá si lo que estamos tratando de incluir son filas o columnas y tendremos un mensaje como el que sigue:
 ```
 Error in `[.data.frame`(df, df$Producto_ID == 5) : 
   undefined columns selected
 ```
+La última parte del código vale la pena que la analizemos a mayor profundidad. Un buen truco para entender lo que hace un bloque de código en R es ejecutarlo parte por parte. Por ejemplo
+```{r listoftruths}
+df$Producto_ID == 5
+```
+Genera una lista de falsos y verdaderos. Esto pasa porque el operador `==` hace una comparación lógica. Por simplicidad, R asume que le estamos preguntando cuáles de los elementos de la lista `df$Producto_ID` tiene un valor igual a `5`. R nos contesta con una lista del mismo tamaño que la lista de IDs de producto, pero con valores `TRUE` en cada elemento que sea igual a `5` y `FALSE` en todos los demás casos. Es posible hacer este tipo de comparaciones también usando operadores como `<` y `>`.
+
+Si yo 
